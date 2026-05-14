@@ -17,8 +17,9 @@ pub fn check(candle: &Candle, cvd: f64, avg_vol: f64) -> Option<Signal> {
     let lower = candle.lower_wick_ratio();
     let upper = candle.upper_wick_ratio();
 
-    // LONG signal: CVD negative + dominant lower wick (rejection of selling)
-    if cvd < 0.0 && lower >= WICK_THRESHOLD && lower > upper {
+    // LONG signal: CVD negative + bearish close + dominant lower wick (rejection of selling)
+    // Candle must close below open — the selling exhaustion isn't complete yet, next candle recovers
+    if cvd < 0.0 && candle.close < candle.open && lower >= WICK_THRESHOLD && lower > upper {
         return Some(Signal {
             time: Utc::now(),
             direction: Direction::Long,
@@ -29,8 +30,8 @@ pub fn check(candle: &Candle, cvd: f64, avg_vol: f64) -> Option<Signal> {
         });
     }
 
-    // SHORT signal: CVD positive + dominant upper wick (rejection of buying)
-    if cvd > 0.0 && upper >= WICK_THRESHOLD && upper > lower {
+    // SHORT signal: CVD positive + bullish close + dominant upper wick (rejection of buying)
+    if cvd > 0.0 && candle.close > candle.open && upper >= WICK_THRESHOLD && upper > lower {
         return Some(Signal {
             time: Utc::now(),
             direction: Direction::Short,

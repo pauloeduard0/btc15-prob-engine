@@ -21,8 +21,8 @@ src/
 
 Identifies **rejection spikes** (large wick + high volume) in a divergent CVD regime:
 
-- **LONG** → rolling CVD < 0 + lower wick ≥ 35% of range + volume ≥ 1.5× avg + lower wick > upper wick
-- **SHORT** → rolling CVD > 0 + upper wick ≥ 35% of range + volume ≥ 1.5× avg + upper wick > lower wick
+- **LONG** → rolling CVD < 0 + candle closes bearish (close < open) + lower wick ≥ 35% of range + volume ≥ 1.5× avg + lower wick > upper wick
+- **SHORT** → rolling CVD > 0 + candle closes bullish (close > open) + upper wick ≥ 35% of range + volume ≥ 1.5× avg + upper wick > lower wick
 
 CVD per candle = `2 × taker_buy_vol − total_volume` (uses Binance kline field `V`).
 Rolling CVD = sum of deltas over the last 20 closed candles + current candle delta.
