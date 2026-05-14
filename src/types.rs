@@ -178,9 +178,10 @@ impl AppState {
                 self.seen.insert(raw.open_time);
 
                 let signal = if self.candles.len() >= MIN_CANDLES {
-                    let cvd = self.rolling_cvd() + candle.delta();
+                    let prev_cvd = self.rolling_cvd();
+                    let cvd = prev_cvd + candle.delta();
                     let avg_vol = self.avg_volume();
-                    crate::signals::check(&candle, cvd, avg_vol)
+                    crate::signals::check(&candle, cvd, prev_cvd, avg_vol)
                 } else {
                     None
                 };
