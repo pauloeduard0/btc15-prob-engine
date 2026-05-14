@@ -6,7 +6,7 @@ mod ui;
 use std::{io, time::Duration};
 
 use crossterm::{
-    event::{DisableMouseCapture, EnableMouseCapture, Event, EventStream, KeyCode},
+    event::{DisableMouseCapture, EnableMouseCapture, Event, EventStream, KeyCode, KeyModifiers},
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
@@ -57,6 +57,7 @@ async fn main() -> anyhow::Result<()> {
             Some(Ok(Event::Key(key))) = kb.next() => {
                 match key.code {
                     KeyCode::Char('q') | KeyCode::Esc => break,
+                    KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => break,
                     KeyCode::Char('c') => state.clear_alert(),
                     _ => {}
                 }
